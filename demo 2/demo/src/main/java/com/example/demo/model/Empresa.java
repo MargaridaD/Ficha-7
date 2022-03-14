@@ -51,6 +51,14 @@ public class Empresa {
 	public void setNumFuncionariosDesdeCriacao(int numFuncionariosDesdeCriacao) {
 		NumFuncionariosDesdeCriacao = numFuncionariosDesdeCriacao;
 	}
+
+	public List<Pessoa> getListaFuncionarios() {
+		return listaFuncionarios;
+	}
+
+	public void setListaFuncionarios(List<Pessoa> listaFuncionarios) {
+		this.listaFuncionarios = listaFuncionarios;
+	}
 	
 	
 
