@@ -2,54 +2,54 @@ package com.example.demo.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Empresa {
-	private static int counter = 0;
-	private int id;
+	private UUID id;
 	public String nome;
 	public String morada;
-	public int NumFuncionariosAtual;
 	public int NumFuncionariosDesdeCriacao;
-	public List<Pessoa> listaFuncionarios;
+	public List<Pessoa> listaFuncionarios;     //NumFuncionários atual é dado pelo tamanho da lista de funcionários
 	
 	
-	public Empresa(String nome, String morada, int numFuncionariosAtual, int numFuncionariosDesdeCriacao) {
+	public Empresa(String nome, String morada) {
 		this.nome = nome;
 		this.morada = morada;
-		NumFuncionariosAtual = numFuncionariosAtual;
-		NumFuncionariosDesdeCriacao = numFuncionariosDesdeCriacao;
-		id = counter;
-		counter++;
+		NumFuncionariosDesdeCriacao = 0;
+		id = UUID.randomUUID();
 		listaFuncionarios = new ArrayList<>();
 	}
 
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
 
 	public String getNome() {
 		return nome;
 	}
+	
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
 	public String getMorada() {
 		return morada;
 	}
+	
 	public void setMorada(String morada) {
 		this.morada = morada;
 	}
+	
 	public int getNumFuncionariosAtual() {
-		return NumFuncionariosAtual;
+		return listaFuncionarios.size();
 	}
-	public void setNumFuncionariosAtual(int numFuncionariosAtual) {
-		NumFuncionariosAtual = numFuncionariosAtual;
-	}
+	
 	public int getNumFuncionariosDesdeCriacao() {
 		return NumFuncionariosDesdeCriacao;
 	}
-	public void setNumFuncionariosDesdeCriacao(int numFuncionariosDesdeCriacao) {
-		NumFuncionariosDesdeCriacao = numFuncionariosDesdeCriacao;
+	
+	public void setNumFuncionariosDesdeCriacao(int NumFuncionariosDesdeCriacao) {
+		this.NumFuncionariosDesdeCriacao = NumFuncionariosDesdeCriacao;
 	}
 
 	public List<Pessoa> getListaFuncionarios() {
@@ -60,6 +60,13 @@ public class Empresa {
 		this.listaFuncionarios = listaFuncionarios;
 	}
 	
-	
+    public void addPessoa(Pessoa pessoa){
+        NumFuncionariosDesdeCriacao++;
+        listaFuncionarios.add(pessoa);
+    }
+
+    public void removePessoa(Pessoa pessoa){
+        listaFuncionarios.remove(pessoa);
+    }
 
 }

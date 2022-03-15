@@ -1,22 +1,25 @@
 package com.example.demo.model;
 
+import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Pessoa {
-	private static int counter = 0;
-	private int id;
+	private UUID id;
 	private String nome;
 	private int idade;
 	private String email;
-	private int idEmpresa; //id da empresa a que a pessoa pertence
+	
+	@JsonIgnore			//Porque a pessoa tem o atributo empresa e a empresa tem o atributo pessoa o que daria um loop infinito
+	private Empresa empresa; //Empresa a que a pessoa pertence
 
-	public Pessoa(String nome, int idade, String email, int idEmpresa) {
+	
+	public Pessoa(String nome, int idade, String email) {
 		this.nome = nome;
 		this.idade = idade;
 		this.email = email;
-		this.idEmpresa = idEmpresa;
-		id = counter;
-		counter++;
+		id = UUID.randomUUID();
 	}
-
 
 
 	public String getNome() {
@@ -43,17 +46,25 @@ public class Pessoa {
 		this.email = email;
 	}
 	
-	public int getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public int getIdEmpresa() {
-		return idEmpresa;
+	public Empresa getIdEmpresa() {
+		return empresa;
 	}
 
-	public void setIdEmpresa(int idEmpresa) {
-		this.idEmpresa = idEmpresa;
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Pessoa [id=" + id + ", nome=" + nome + ", idade=" + idade + ", email=" + email + "]";
+	}
+	
+	
 	
 }
 

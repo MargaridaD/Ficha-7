@@ -4,6 +4,7 @@ package com.example.demo.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -15,170 +16,79 @@ import com.example.demo.model.Pessoa;
 @Service
 public class ServiceEmpresa {
 
-	List<Pessoa>pessoas = new ArrayList<>();
-	List<Empresa>empresas = new ArrayList<>();
+	private List<Pessoa>pessoas;
+	private List<Empresa>empresas;
 	
-	public List<Empresa> getAllEmpresas(){
-		System.out.println(empresas);
-		return empresas;
-	} 
-	
-	public Empresa getEmpresaById(String id){
-		try {
-			Integer id_aux = Integer.parseInt(id);
-			for(Empresa i : empresas) {
-				if(i.getId() == id_aux) {
-					return i;
-				}
-			}
-			System.out.println("Id inválido.");
-			return null;	
-		}catch (Exception e){
-			System.out.println("Id inválido. Introduza um número inteiro entre 0 e " + empresas.size());
-			return null;
-		}
-	} 
-	
-	public List<Empresa> addEmpresa(Empresa empresa){
-		System.out.println(empresa);
-			empresas.add(empresa);
-			return empresas;
+	public ServiceEmpresa() {
+		List<Pessoa>pessoas = new ArrayList<>();
+		List<Empresa>empresas = new ArrayList<>();
 	}
 	
-	public Empresa updateEmpresa(Empresa empresa){
-		for(Empresa i : empresas) {
-				if(i.getId() == empresa.getId()) {
-					if(empresa.getNome() != null && !empresa.getNome().isBlank()) {
-						i.setNome(empresa.getNome());
-					}
-					if(empresa.getMorada() != null && !empresa.getMorada().isBlank()) {
-						i.setMorada(empresa.getMorada());
-					}
-					/*if(empresa.getNumFuncionariosAtual()>=0) {
-						i.setNumFuncionariosAtual(empresa.getNumFuncionariosAtual());;
-					}
-					if(empresa.getNumFuncionariosDesdeCriacao()>=0) {
-						i.setNumFuncionariosDesdeCriacao(empresa.getNumFuncionariosDesdeCriacao());;
-					}*/
-				}
-				return i;
-		}
-		System.out.println("Empresa não existe.");
-		return null;
-	} 
+    public List<Empresa> getListaEmpresas(){
+        return empresas;
+    }
 	
-	public List<Empresa> deleteEmpresa(String id){
-		try {
-			Integer id_aux = Integer.parseInt(id);
-			for(Empresa i : empresas) {
-				if(i.getId() == id_aux) {
-					empresas.remove(i);
-					for(Pessoa j:pessoas) {
-						if(j.getIdEmpresa() == id_aux) {
-							pessoas.remove(j);
-						}
-					}
-					return empresas;
-				}
-			}
-			System.out.println("Id inválido.");
-			return null;	
-		}catch (Exception e){
-			System.out.println("Id inválido. Introduza um número inteiro entre 0 e " + empresas.size());
-			return null;
-		}
-	}
-	
-
-	
-	public List<Pessoa> getAllPessoas(){
-		System.out.println(pessoas);
-		return pessoas;
-	} 
-	
-	public Pessoa getPessoaById(String id){
-		try {
-			Integer id_aux = Integer.parseInt(id);
-			for(Pessoa i : pessoas) {
-				if(i.getId() == id_aux) {
-					return i;
-				}
-			}
-			System.out.println("Id inválido.");
-			return null;	
-		}catch (Exception e){
-			System.out.println("Id inválido. Introduza um número inteiro entre 0 e " + pessoas.size());
-			return null;
-		}
-	} 
-	
-	public List<Pessoa> addPessoa(Pessoa pessoa){
-		System.out.println(pessoa);
-		for(Empresa i:empresas) {
-			if(pessoa.getIdEmpresa()==i.getId()) {
-				i.getListaFuncionarios().add(pessoa);
-				pessoas.add(pessoa);
-				i.setNumFuncionariosAtual(i.getNumFuncionariosAtual()+1);
-				i.setNumFuncionariosDesdeCriacao(i.getNumFuncionariosDesdeCriacao()+1);
-				return pessoas;
-			}
+	public boolean addEmpresa(Empresa empresa){
+		if(empresa.getId() != null  
+    			|| empresa.getNome() == null || !empresa.getNome().isBlank()
+    			|| empresa.getMorada() == null || !empresa.getMorada().isBlank()) {
+			return false;
 		}
 		
-		System.out.println("Empresa não existe");
-		return null;
+		empresas.add(empresa);
+		return true;
 	}
 	
-	public Pessoa updatePessoa(Pessoa pessoa){
-		for(Pessoa i : pessoas) {
-				if(i.getId() == pessoa.getId()) {
-					if(pessoa.getNome() != null && !pessoa.getNome().isBlank()) {
-						i.setNome(pessoa.getNome());
-					}
-					if(pessoa.getIdade()>=0) {
-						i.setIdade(pessoa.getIdade());
-					}
-					if(pessoa.getEmail() != null && !pessoa.getEmail().isBlank()) {
-						i.setEmail(pessoa.getEmail());
-					}
-				}
-				return i;
-		}
-		System.out.println("Pessoa não existe.");
-		return null;
-	} 
-	
-	public List<Pessoa> deletePessoa(String id){
-		try {
-			Integer id_aux = Integer.parseInt(id);
-			for(Pessoa i : pessoas) {
-				if(i.getId() == id_aux) {
-					pessoas.remove(i);
-					
-			/*	for(Empresa j: empresas) {
-					if(j.get)
-				}
-					
-				j.setNumFuncionariosAtual(j.getNumFuncionariosAtual()-1);
-					j.setNumFuncionariosDesdeCriacao(j.getNumFuncionariosDesdeCriacao()-1); */
-					return pessoas;
-				}
-			}
-			System.out.println("Id inválido.");
-			return null;	
-		}catch (Exception e){
-			System.out.println("Id inválido. Introduza um número inteiro entre 0 e " + pessoas.size());
-			return null;
-		}
-	}
-	
+    public boolean deleteEmpresa(Empresa emp){
+        Optional<Empresa> empOptional = getEmpresa(emp);
 
-	public List<Empresa> getEmpresas() {
-		return empresas;
-	}
+        if (empOptional.isEmpty()){
+            return false;
+        }
 
-	public void setEmpresas(List<Empresa> empresas) {
-		this.empresas = empresas;
-	}
+        Empresa empresaToDelete = empOptional.get();
+
+        for (Pessoa i: empresaToDelete.getListaFuncionarios()){
+            pessoas.remove(i);
+        }
+
+        empresas.remove(empresaToDelete);
+
+        return true;
+    }
+
+    public boolean updateEmpresa(Empresa emp){
+        Optional<Empresa> empOptional = getEmpresa(emp);
+        if (empOptional.isEmpty()){
+            return false;
+        }
+
+        Empresa empresaToUpdate = empOptional.get();
+
+        if (emp.getNome()!= null && !emp.getNome().isBlank()){
+            empresaToUpdate.setNome(emp.getNome());
+        }
+
+        if (emp.getMorada()!= null && !emp.getMorada().isBlank()){
+            empresaToUpdate.setMorada(emp.getMorada());
+        }
+
+        return true;
+    }
+
+    public Optional<Empresa> getEmpresa(Empresa emp){
+        if (emp.getId()!= null) {
+            for (Empresa i : empresas) {
+                if (i.getId().equals(emp.getId())) {
+                    return Optional.of(i);
+                }
+            }
+        }
+
+        return Optional.empty();
+    }
+
+	
 	
 	
 	
