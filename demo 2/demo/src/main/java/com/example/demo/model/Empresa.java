@@ -17,6 +17,7 @@ public class Empresa {
 		this.morada = morada;
 		NumFuncionariosDesdeCriacao = 0;
 		id = UUID.randomUUID();
+		NumFuncionariosDesdeCriacao = 0;
 		listaFuncionarios = new ArrayList<>();
 	}
 
