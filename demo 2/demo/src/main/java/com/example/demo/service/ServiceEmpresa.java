@@ -30,8 +30,8 @@ public class ServiceEmpresa {
 	
 	public boolean addEmpresa(Empresa empresa){
 		if(empresa.getId() != null  
-    			|| empresa.getNome() == null || !empresa.getNome().isBlank()
-    			|| empresa.getMorada() == null || !empresa.getMorada().isBlank()) {
+    			|| empresa.getNome() == null || empresa.getNome().isBlank()
+    			|| empresa.getMorada() == null || empresa.getMorada().isBlank()) {
 			return false;
 		}
 		

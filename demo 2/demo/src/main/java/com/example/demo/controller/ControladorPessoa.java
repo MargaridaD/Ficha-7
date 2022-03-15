@@ -18,7 +18,7 @@ import com.example.demo.service.ServiceEmpresa;
 @RestController
 public class ControladorPessoa {
 	
-	private final ServiceEmpresa serviceEmpresa;
+	/*private final ServiceEmpresa serviceEmpresa;
 	
 	@Autowired												//Esta anotacao permite que o Spring injete dependencias nesta classe
 	public ControladorPessoa(ServiceEmpresa serviceEmpresa){
@@ -56,6 +56,6 @@ public class ControladorPessoa {
     @DeleteMapping("/deletePessoa/{id}")
     public List<Pessoa> deletePessoa(@PathVariable String id){
     	return serviceEmpresa.deletePessoa(id);
-    }
+    }*/
     
 }
