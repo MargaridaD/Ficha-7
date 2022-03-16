@@ -4,17 +4,20 @@ public class SimpleResponse {
 	
 	private boolean statusOk;
     private String message;
-
-    public SimpleResponse() {					//Construtor
+    
+    //CONSTRUTOR
+    public SimpleResponse() {					
         statusOk = false;
         message = "Ocorreu um erro";
     }
-
+    
+    //METODO
     public void setSucess(String message){
         statusOk = true;
         this.message = message;
     }
-
+    
+    //GETTERS E SETTERS
     public boolean isStatusOk() {
         return statusOk;
     }

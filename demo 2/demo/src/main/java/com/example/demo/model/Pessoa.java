@@ -2,10 +2,22 @@ package com.example.demo.model;
 
 import java.util.UUID;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Entity
+@Table(name = "Pessoa")
 public class Pessoa {
-	private UUID id;
+	
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long id;
+    
 	private String nome;
 	private int idade;
 	private String email;
@@ -14,12 +26,12 @@ public class Pessoa {
 	private Empresa empresa; //Empresa a que a pessoa pertence
 
 	
-	public Pessoa(String nome, int idade, String email) {
+	/*public Pessoa(String nome, int idade, String email) {
 		this.nome = nome;
 		this.idade = idade;
 		this.email = email;
 		id = UUID.randomUUID();
-	}
+	}*/
 
 
 	public String getNome() {
@@ -46,7 +58,7 @@ public class Pessoa {
 		this.email = email;
 	}
 	
-	public UUID getId() {
+	public Long getId() {
 		return id;
 	}
 

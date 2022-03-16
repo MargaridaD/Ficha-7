@@ -5,23 +5,34 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import com.example.demo.model.Empresa;
 import com.example.demo.model.Pessoa;
+import com.example.demo.repository.pessoaRepository;
 
 
 
 @Service
 public class ServiceEmpresa {
 
+   /* private final pessoaRepository pessoaRepo;
+
+    @Autowired
+    public ServiceEmpresa(pessoaRepository pessoaRepo) {
+        this.pessoaRepo = pessoaRepo;
+    }*/
+    
 	private List<Pessoa>pessoas;
 	private List<Empresa>empresas;
 	
 	public ServiceEmpresa() {
-		List<Pessoa>pessoas = new ArrayList<>();
-		List<Empresa>empresas = new ArrayList<>();
+		pessoas = new ArrayList<>();
+		empresas =new ArrayList<>();
 	}
 	
     public List<Empresa> getListaEmpresas(){
@@ -29,8 +40,7 @@ public class ServiceEmpresa {
     }
 	
 	public boolean addEmpresa(Empresa empresa){
-		if(empresa.getId() != null  
-    			|| empresa.getNome() == null || empresa.getNome().isBlank()
+		if(empresa.getNome() == null || empresa.getNome().isBlank()
     			|| empresa.getMorada() == null || empresa.getMorada().isBlank()) {
 			return false;
 		}
@@ -39,8 +49,35 @@ public class ServiceEmpresa {
 		return true;
 	}
 	
-    public boolean deleteEmpresa(Empresa emp){
-        Optional<Empresa> empOptional = getEmpresa(emp);
+    public Optional<Empresa> getEmpresaById(String id){
+        if (id != null) {
+        	try {
+        		UUID uuid = UUID.fromString(id);  		//Converte String em UUID
+        		for (Empresa e : empresas) {
+        			if (e.getId().equals(uuid)) {		//PORQUE NÃO COMPARAMOS A EMPRESA?
+        				return Optional.of(e);
+        			}
+        		}
+        	}catch (Exception e) {
+                return Optional.empty();
+        	}
+        }
+        return Optional.empty();
+    }
+	
+    public Optional<Empresa> getEmpresa(Empresa empresa){
+        if (empresa.getId()!= null) {
+            for (Empresa e : empresas) {
+                if (e.getId().equals(empresa.getId())) {		//PORQUE NÃO COMPARAMOS A EMPRESA?
+                    return Optional.of(e);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+    
+    public boolean deleteEmpresa(Empresa empresa){
+        Optional<Empresa> empOptional = getEmpresa(empresa);
 
         if (empOptional.isEmpty()){
             return false;
@@ -48,8 +85,8 @@ public class ServiceEmpresa {
 
         Empresa empresaToDelete = empOptional.get();
 
-        for (Pessoa i: empresaToDelete.getListaFuncionarios()){
-            pessoas.remove(i);
+        for (Pessoa p: empresaToDelete.getListaFuncionarios()){
+            pessoas.remove(p);
         }
 
         empresas.remove(empresaToDelete);
@@ -57,36 +94,26 @@ public class ServiceEmpresa {
         return true;
     }
 
-    public boolean updateEmpresa(Empresa emp){
-        Optional<Empresa> empOptional = getEmpresa(emp);
+    public boolean updateEmpresa(Empresa empresa){
+        Optional<Empresa> empOptional = getEmpresa(empresa);
         if (empOptional.isEmpty()){
             return false;
         }
 
         Empresa empresaToUpdate = empOptional.get();
 
-        if (emp.getNome()!= null && !emp.getNome().isBlank()){
-            empresaToUpdate.setNome(emp.getNome());
+        if (empresa.getNome()!= null && !empresa.getNome().isBlank()){
+            empresaToUpdate.setNome(empresa.getNome());
         }
 
-        if (emp.getMorada()!= null && !emp.getMorada().isBlank()){
-            empresaToUpdate.setMorada(emp.getMorada());
+        if (empresa.getMorada()!= null && !empresa.getMorada().isBlank()){
+            empresaToUpdate.setMorada(empresa.getMorada());
         }
 
         return true;
     }
 
-    public Optional<Empresa> getEmpresa(Empresa emp){
-        if (emp.getId()!= null) {
-            for (Empresa i : empresas) {
-                if (i.getId().equals(emp.getId())) {
-                    return Optional.of(i);
-                }
-            }
-        }
 
-        return Optional.empty();
-    }
 
 	
 	

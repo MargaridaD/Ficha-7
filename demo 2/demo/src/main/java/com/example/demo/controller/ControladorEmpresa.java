@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class ControladorEmpresa {
 		this.serviceEmpresa = serviceEmpresa;
 	}
     
-	@GetMapping("/getListaEmpresas")
+	@GetMapping("/getAllEmpresas")
 	public List<Empresa> getAllEmpresas(){
 		return serviceEmpresa.getListaEmpresas();
 	}
@@ -49,6 +50,46 @@ public class ControladorEmpresa {
             		.status(HttpStatus.BAD_REQUEST)
             		.body(sr);
     }	
+    
+    @GetMapping("/getEmpresaById/{id}")
+    public ResponseEntity<SimpleResponse> getEmpresaById(@PathVariable String id){
+        GetEmpresaResponse ger = new GetEmpresaResponse();
+        
+        Optional<Empresa> empresaOptional = serviceEmpresa.getEmpresaById(id);
+
+        if (empresaOptional.isEmpty()){
+            ger.setMessage("Id errado");
+            return ResponseEntity
+            		.status(HttpStatus.NOT_FOUND)
+            		.body(ger);
+        }else{
+            ger.setEmpresa(empresaOptional.get());
+            ger.setSucess("Empresa Encontrada");
+            return ResponseEntity
+            		.status(HttpStatus.OK)
+            		.body(ger);
+        }
+    }
+    
+    /*@GetMapping("/geEmpresa")
+    public ResponseEntity<SimpleResponse> getEmpresa(@RequestBody Empresa empresa){
+        GetEmpresaResponse ger = new GetEmpresaResponse();
+
+        Optional<Empresa> empresaOptional = serviceEmpresa.getEmpresa(empresa);
+
+        if (empresaOptional.isEmpty()){
+            ger.setMessage("Empresa não encontrada");
+            return ResponseEntity
+            		.status(HttpStatus.NOT_FOUND)
+            		.body(ger);
+        }else{
+            ger.setEmpresa(empresaOptional.get());
+            ger.setSucess("Empresa Encontrada");
+            return ResponseEntity
+            		.status(HttpStatus.OK)
+            		.body(ger);
+        }
+    }*/
     
     @DeleteMapping("/deleteEmpresa")
     public ResponseEntity<SimpleResponse> deleteEmpresa(@RequestBody Empresa empresa){
@@ -82,20 +123,6 @@ public class ControladorEmpresa {
         		.body(sr);
     }
 
-    @GetMapping("/geEmpresaById")
-    public ResponseEntity<SimpleResponse> getEmpresa(@RequestBody Empresa empresa){
-        GetEmpresaResponse ger = new GetEmpresaResponse();
 
-        Optional<Empresa> empresaOptional = serviceEmpresa.getEmpresa(empresa);
-
-        if (empresaOptional.isEmpty()){
-            ger.setMessage("Empresa não encontrada");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ger);
-        }else{
-            ger.setEmpresa(empresaOptional.get());
-            ger.setSucess("Empresa Encontrada");
-            return ResponseEntity.status(HttpStatus.OK).body(ger);
-        }
-    }
        
 }
